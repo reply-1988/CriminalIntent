@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CriminalIntent</string>
+    <string name="crime_title_hint">为这个行为起一个标题</string>
+    <string name="crime_title_label">标题</string>
+    <string name="crime_details_label">详情</string>
+    <string name="crime_solved_label">是否被解决</string>
+    <string name="to_first">第一个</string>
+    <string name="to_last">最后一个</string>
+    <string name="date_picker_title">犯罪时间</string>
+</resources>
