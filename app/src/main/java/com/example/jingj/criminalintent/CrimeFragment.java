@@ -78,10 +78,9 @@ public class CrimeFragment extends Fragment {
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager manager = getFragmentManager();
-                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
-                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
-                dialog.show(manager, DIALOG_DATE);
+                Intent intent = new Intent(getActivity(), DatePickerActivity.class);
+                intent.putExtra(DatePickerFragment.ARG_DATE, mCrime.getDate());
+                startActivityForResult(intent, REQUEST_DATE);
             }
         });
         mSolvedCheckBox = v.findViewById(R.id.crime_solved);

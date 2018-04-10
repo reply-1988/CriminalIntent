@@ -7,4 +7,5 @@
     <string name="to_first">第一个</string>
     <string name="to_last">最后一个</string>
     <string name="date_picker_title">犯罪时间</string>
+    <string name="date_button">确定</string>
 </resources>
