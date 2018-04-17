@@ -123,7 +123,8 @@ public class CrimeListFragment extends Fragment {
                 mAdapter = new CrimeAdapter(crimes);
                 mCrimeRecycleView.setAdapter(mAdapter);
             } else {
-                mAdapter.notifyItemChanged(nowposition);
+                mAdapter.setCrimes(crimes);
+                mAdapter.notifyDataSetChanged();
             }
         } else {
             mCrimeRecycleView.setVisibility(View.INVISIBLE);
@@ -193,6 +194,10 @@ public class CrimeListFragment extends Fragment {
         @Override
         public int getItemViewType(int position) {
             return mCrimes.get(position).getPolice();
+        }
+
+        public void setCrimes(List<Crime> crimes) {
+            mCrimes = crimes;
         }
     }
 
