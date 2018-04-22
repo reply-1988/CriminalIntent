@@ -127,6 +127,9 @@ public class CrimeListFragment extends Fragment {
                 mAdapter.notifyDataSetChanged();
             }
         } else {
+            List<Crime> crimes = crimeLab.getCrimes();
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecycleView.setAdapter(mAdapter);
             mCrimeRecycleView.setVisibility(View.INVISIBLE);
             mTextView.setVisibility(View.VISIBLE);
             mTextView.setVisibility(View.VISIBLE);

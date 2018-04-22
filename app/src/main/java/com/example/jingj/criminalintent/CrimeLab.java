@@ -11,6 +11,7 @@ import com.example.jingj.criminalintent.datebase.CrimeCursorWrapper;
 import com.example.jingj.criminalintent.datebase.CrimeDbSchema;
 import com.example.jingj.criminalintent.datebase.CrimeDbSchema.CrimeTable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -42,6 +43,14 @@ public class CrimeLab {
     public void addCrime(Crime c){
         ContentValues values = getContentValues(c);
         mDatabase.insert(CrimeTable.NAME, null, values);
+    }
+
+    public File getPhotoFile(Crime crime) {
+        //获取/data/data/<包名>/files目录
+        File fileDir = mContext.getFilesDir();
+        //该返回并不是创建文件，返回的是指向某个具体位置的File对象
+        //后面会用FileProvider吧路径以URI的方式暴露
+        return new File(fileDir, crime.getPhotoFilename());
     }
 
     public void updateCrime(Crime crime) {
@@ -112,6 +121,7 @@ public class CrimeLab {
         values.put(CrimeTable.Cols.TITLE, crime.getTitle());
         values.put(CrimeTable.Cols.DATE, crime.getDate().getTime());
         values.put(CrimeTable.Cols.SOLVED, crime.isSolved() ? 1 : 0);
+        values.put(CrimeTable.Cols.SUSPECT, crime.getSuspect());
         return values;
     }
 }
