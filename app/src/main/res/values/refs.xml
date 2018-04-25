@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //别名的type属性决定了资源ID属于什么类，即使此资源在values目录中，它也是属于layout内部类
+    <item name="activity_masterdetail" type="layout">@layout/activity_fragment</item>
+</resources>

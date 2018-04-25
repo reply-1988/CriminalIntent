@@ -15,7 +15,7 @@ import android.widget.Button;
 import java.util.List;
 import java.util.UUID;
 
-public class CrimePagerActivity extends AppCompatActivity {
+public class CrimePagerActivity extends AppCompatActivity implements CrimeFragment.Callbacks {
 
     private static final String EXTRA_CRIME_ID = "com.jingj.android.criminalintent.crime_id";
 
@@ -79,6 +79,7 @@ public class CrimePagerActivity extends AppCompatActivity {
                 return mCrimes.size();
             }
         });
+
         for (int i = 0; i < mCrimes.size(); i++){
             if (mCrimes.get(i).getId().equals(crimeId)){
                 mViewPager.setCurrentItem(i);
@@ -101,5 +102,10 @@ public class CrimePagerActivity extends AppCompatActivity {
                 mViewPager.setCurrentItem(mCrimes.size() - 1);
             }
         });
+    }
+
+    @Override
+    public void onCrimeUpdated(Crime crime) {
+
     }
 }

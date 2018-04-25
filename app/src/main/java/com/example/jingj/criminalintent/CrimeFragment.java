@@ -2,6 +2,7 @@ package com.example.jingj.criminalintent;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -42,6 +43,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static com.example.jingj.criminalintent.CrimeListFragment.*;
+
 /**
  * Created by jingj on 2018/3/11.
  */
@@ -67,9 +70,24 @@ public class CrimeFragment extends Fragment {
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
     private File mPhotoFile;
+    private Callbacks mCallbacks;
 
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
+
+    //托管活动所需要实现的接口
+    public interface Callbacks {
+        void onCrimeUpdated(Crime crime);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
+    public CrimeFragment() {
+    }
 
     public static CrimeFragment newInstance(UUID crimeID){
         Bundle args = new Bundle();
@@ -97,11 +115,18 @@ public class CrimeFragment extends Fragment {
         CrimeLab.get(getActivity()).updateCrime(mCrime);
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
+
         mTitleField = v.findViewById(R.id.crime_title);
         mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
@@ -113,6 +138,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mCrime.setTitle(s.toString());
+                updateCrime();
             }
 
             @Override
@@ -120,6 +146,7 @@ public class CrimeFragment extends Fragment {
                 //同上
             }
         });
+
         mDateButton = v.findViewById(R.id.crime_date);
         updateDate();
         mDateButton.setOnClickListener(new View.OnClickListener() {
@@ -130,14 +157,17 @@ public class CrimeFragment extends Fragment {
                 startActivityForResult(intent, REQUEST_DATE);
             }
         });
+
         mSolvedCheckBox = v.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
+                updateCrime();
             }
         });
+
         mReportButton = v.findViewById(R.id.crime_report);
         mReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,6 +259,7 @@ public class CrimeFragment extends Fragment {
         if (requestCode == REQUEST_DATE){
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
+            updateCrime();
             updateDate();
         }
         else if (requestCode == REQUEST_CONTACT) {
@@ -253,6 +284,7 @@ public class CrimeFragment extends Fragment {
                 n.moveToFirst();
                 String contactId = n.getString(n.getColumnIndex(ContactsContract.Contacts._ID));
                 mCrime.setSuspect(suspect);
+                updateCrime();
                 mSuspectButton.setText(suspect);
                 //获取联系人电话号码
                 if (ContextCompat.checkSelfPermission(getActivity(),
@@ -302,6 +334,7 @@ public class CrimeFragment extends Fragment {
 
             getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             updatePhotoView(mPhotoView.getMeasuredWidth(), mPhotoView.getMeasuredHeight());
+            updateCrime();
         }
     }
 
@@ -332,6 +365,11 @@ public class CrimeFragment extends Fragment {
 
     private void updateDate() {
         mDateButton.setText(mCrime.getDate().toString());
+    }
+
+    private void updateCrime() {
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated(mCrime);
     }
 
     private String getCrimeReport() {
