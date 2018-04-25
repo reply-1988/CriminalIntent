@@ -22,7 +22,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,8 +38,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static com.example.jingj.criminalintent.CrimeListFragment.*;
@@ -364,7 +365,8 @@ public class CrimeFragment extends Fragment {
     }
 
     private void updateDate() {
-        mDateButton.setText(mCrime.getDate().toString());
+        DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.CHINA);
+        mDateButton.setText(df.format(mCrime.getDate()));
     }
 
     private void updateCrime() {
@@ -380,8 +382,8 @@ public class CrimeFragment extends Fragment {
             solvedString = getString(R.string.crime_report_unsolved);
         }
 
-        String dateFormat = "EEE, MMM dd";
-        String dateString = DateFormat.format(dateFormat, mCrime.getDate()).toString();
+        DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.CHINA);
+        String dateString = df.format(mCrime.getDate());
 
         String suspect = mCrime.getSuspect();
         if (suspect == null) {
