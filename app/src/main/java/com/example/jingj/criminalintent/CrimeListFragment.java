@@ -184,6 +184,10 @@ public class CrimeListFragment extends Fragment {
             mTitleTextView.setText(mCrime.getTitle());
             mDateTextView.setText(getMediumDateFormat(getActivity()).format(mCrime.getDate()));
             mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.INVISIBLE);
+            itemView.setContentDescription(mCrime.getTitle() +
+                    getMediumDateFormat(getActivity()).format(mCrime.getDate()) +
+                    (crime.isSolved() ? getString(R.string.crime_solved_description) :
+                            getString(R.string.crime_not_solved_description)));
         }
 
         @Override

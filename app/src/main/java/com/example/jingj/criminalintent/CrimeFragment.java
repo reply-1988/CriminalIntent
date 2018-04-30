@@ -401,9 +401,12 @@ public class CrimeFragment extends Fragment {
     private void updatePhotoView(int width, int height) {
         if (mPhotoFile == null || !mPhotoFile.exists()) {
             mPhotoView.setImageDrawable(null);
+            //设置TalkBack
+            mPhotoView.setContentDescription(getString(R.string.crime_photo_no_image_description));
         } else {
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), width, height);
             mPhotoView.setImageBitmap(bitmap);
+            mPhotoView.setContentDescription(getString(R.string.crime_photo_image_description));
         }
     }
 
